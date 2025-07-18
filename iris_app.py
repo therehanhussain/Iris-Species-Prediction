@@ -52,6 +52,13 @@ with st.sidebar:
     petal_width = st.slider("Petal Width (cm)", 0.1, 2.5, 0.2)
     st.info("Model: RandomForestClassifier 🌲")
 
+    with st.expander("ℹ️ About Iris Features"):
+    st.markdown("""
+    - **Sepal Length & Width**: Outer part of the flower.
+    - **Petal Length & Width**: Inner colorful part, varies most between species.
+    - Based on these, the model predicts **Setosa**, **Versicolor**, or **Virginica**.
+    """)
+
 # 🔍 Prepare data for prediction
 input_data = np.array([[sepal_length, sepal_width, petal_length, petal_width]])
 prediction = model.predict(input_data)[0]
@@ -64,6 +71,12 @@ species_colors = ['#66bb6a', '#ffa726', '#42a5f5']
 # 🧠 Show Prediction
 st.subheader("🎯 Predicted Species:")
 st.success(f"🌸 **{iris_species[prediction]}**")
+
+if st.button("📥 Download Prediction"):
+    df = pd.DataFrame(input_data, columns=feature_names)
+    df["Predicted Species"] = iris_species[prediction]
+    csv = df.to_csv(index=False).encode('utf-8')
+    st.download_button("Download as CSV", data=csv, file_name="iris_prediction.csv", mime='text/csv')
 
 # 📈 Probability Chart
 st.subheader("📊 Prediction Confidence")
@@ -92,3 +105,10 @@ st.pyplot(fig2)
 # 🚀 Footer
 st.markdown("---")
 st.markdown("<p style='text-align: center;'>🚀 Built with ❤️ by <b>Rehan</b> using Streamlit & Machine Learning.</p>", unsafe_allow_html=True)
+
+[theme]
+primaryColor="#4A148C"
+backgroundColor="#f5f5f5"
+secondaryBackgroundColor="#ffffff"
+textColor="#262730"
+font="sans serif"
